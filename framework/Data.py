@@ -4,6 +4,10 @@ import sys
 # class to manage data
 class Data():
 
+  # initializer
+  def __init__(self)->None:
+    super().__init__()
+
   # length getter
   def get_len(self):
     if hasattr(self, "_len"):

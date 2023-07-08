@@ -1,5 +1,4 @@
 import sys
-import inspect
 import torch
 import torch.nn as nn
 
@@ -26,8 +25,13 @@ class Model(nn.Module):
     self._device = device
     self._non_blocking = non_blocking
     # send model to target device
-    if (self._device != "cpu"):
-      self._model = nn.DataParallel(self._model.to(device), device_ids=device_ids)
+    if (self._device == "cpu"):
+      self._model.cpu()
+    elif (self._device == "cuda"):
+      self._model = nn.DataParallel(self._model.cuda(), device_ids=device_ids)
+    else:
+      print("error : invalid device type is specified.")
+      sys.exit()
 
   # forward function calculator
   def forward(self, **kwargs)->dict:

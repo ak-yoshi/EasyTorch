@@ -1,7 +1,7 @@
 # EasyTorch
 
 ## Introduction
-This is a template code to reduce the implementation burden in code using PyTorch.
+This is a template code to reduce the implementation burden in PyTorch coding.
 You can examine training or evaluation easily by simply preparing model and training data.
 
 ## Requirement
@@ -25,7 +25,7 @@ data_manager = DataManager.DataManager(train_data=ud_train_data, test_data=ud_te
 ```
 
 Here, it is needed to inhelit __Data__ class at user-defined dataset class implementation.
-And user-defined dataset class must have specified variables to hold data size, data contents and target contents.
+And user-defined dataset class must have specified variables(data size, data contents and target contents).
 
 ```python
 from framework import Data

@@ -24,7 +24,13 @@ class Criterion(nn.Module):
     self._device = device
     self._non_blocking = non_blocking
     # send model to target device
-    self._criterion.to(self._device)
+    if (self._device == "cpu"):
+      self._criterion.cpu()
+    elif (self._device == "cuda"):
+      self._criterion.cuda()
+    else:
+      print("error : invalid device type is specified.")
+      sys.exit()
 
   # forward function calculator
   def forward(self, **kwargs)->dict:
