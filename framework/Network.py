@@ -4,6 +4,7 @@ import torch
 from framework import Model
 from framework import Criterion
 from framework import Evaluator
+from framework import Optimizer
 
 #
 # class to manage model training/evaluation
@@ -17,7 +18,7 @@ class Network():
     self._model = Model.Model(kwargs.get("model", None))
     self._criterion = Criterion.Criterion(kwargs.get("criterion", None))
     self._evaluator = Evaluator.Evaluator(kwargs.get("evaluator", None))
-    self._optimizer = kwargs.get("optimizer", None)
+    self._optimizer = Optimizer.Optimizer(kwargs.get("optimizer", None))
     self._data_manager = kwargs.get("data_manager", None)
     self._save_checkpoint = kwargs.get("save_checkpoint", False)
     self._epoch = 0
@@ -37,24 +38,24 @@ class Network():
     self._model.save("model/model.pth")
     print("trained model at current step was saved.")
 
-  # load checker
-  def check_loaded(self):
-    if (self._model == None):
+  # available checker
+  def check_available(self):
+    if (not self._model.check_available()):
       print("error : model is not loaded.")
       sys.exit()
-    if (self._criterion == None):
+    if (not self._criterion.check_available()):
       print("error : criterion is not loaded.")
       sys.exit()
-    if (self._optimizer == None):
+    if (not self._optimizer.check_available()):
       print("error : optimizer is not loaded.")
       sys.exit()
-    if (self._data_manager == None):
+    if (not self._data_manager):
       print("error : data manager is not loaded.")
       sys.exit()
 
   # training function
   def train(self):
-    self.check_loaded()
+    self.check_available()
     total_loss = 0.0
     total_size = 0
     self._model.train()
@@ -75,7 +76,7 @@ class Network():
 
   # eval function
   def eval(self):
-    self.check_loaded()
+    self.check_available()
     total_loss = 0.0
     total_eval = 0.0
     total_size = 0
@@ -84,7 +85,7 @@ class Network():
       for batch in self._data_manager.get_eval_data_loader():
         out = self._model(**batch)
         loss = self._criterion(**out)
-        eval = self._evaluator(**out) if self._evaluator else 0.0
+        eval = self._evaluator(**out) if self._evaluator.check_available() else 0.0
         total_loss += loss
         total_eval += eval
         total_size += batch["size"]
@@ -96,7 +97,7 @@ class Network():
 
   # test function
   def test(self):
-    self.check_loaded()
+    self.check_available()
     total_loss = 0.0
     total_eval = 0.0
     total_size = 0
@@ -105,7 +106,7 @@ class Network():
       for batch in self._data_manager.get_test_data_loader():
         out = self._model(**batch)
         loss = self._criterion(**out)
-        eval = self._evaluator(**out) if self._evaluator else 0.0
+        eval = self._evaluator(**out) if self._evaluator.check_available() else 0.0
         total_loss += loss
         total_eval += eval
         total_size += batch["size"]

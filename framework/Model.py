@@ -4,6 +4,7 @@ import torch.nn as nn
 
 #
 # class to manage model
+# usage : calculate network function by forward()
 class Model(nn.Module):
 
   # initializer
@@ -14,10 +15,14 @@ class Model(nn.Module):
     self._device = "cpu"
     self._device_id = [0]
     self._non_blocking = False
-    # check if forward function is defined
-    if not hasattr(self._model, "forward"):
-      print("error : forward function is not defined in _model.")
+    # check if forward is defined
+    if self._model and not hasattr(self._model, "forward"):
+      print("error : forward() is not defined in _model.")
       sys.exit()
+
+  # available checker
+  def check_available(self)->bool:
+    return self._model
 
   # run type setter
   def set_run_type(self, device:str, device_ids:list, non_blocking:bool)->None:
@@ -25,13 +30,14 @@ class Model(nn.Module):
     self._device = device
     self._non_blocking = non_blocking
     # send model to target device
-    if (self._device == "cpu"):
-      self._model.cpu()
-    elif (self._device == "cuda"):
-      self._model = nn.DataParallel(self._model.cuda(), device_ids=device_ids)
-    else:
-      print("error : invalid device type is specified.")
-      sys.exit()
+    if (self._model):
+      if (self._device == "cpu"):
+        self._model.cpu()
+      elif (self._device == "cuda"):
+        self._model = nn.DataParallel(self._model.cuda(), device_ids=device_ids)
+      else:
+        print("error : invalid device type is specified.")
+        sys.exit()
 
   # forward function calculator
   def forward(self, **kwargs)->dict:
