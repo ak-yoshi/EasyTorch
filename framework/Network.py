@@ -33,6 +33,11 @@ class Network():
     self._criterion.set_run_type(device, non_blocking)
     self._evaluator.set_run_type(device, non_blocking)
 
+  # trained model loader
+  def load(self):
+    self._model.load("model/model.pth")
+    print("trained model was loaded.")
+
   # trained model saver
   def save(self):
     self._model.save("model/model.pth")
