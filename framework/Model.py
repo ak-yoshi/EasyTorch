@@ -47,10 +47,11 @@ class Model(nn.Module):
     kwargs["out"] = out
     return kwargs
 
-  # model function loader
+  # model state loader
   def load(self, filepath:str)->None:
-    self._model = torch.load(filepath)
+    state_dict = torch.load(filepath)
+    self._model.load_state_dict(state_dict)
 
-  # model function saver
+  # model state saver
   def save(self, filepath:str)->None:
-    torch.save(self._model, filepath)
+    torch.save(self._model.state_dict(), filepath)
