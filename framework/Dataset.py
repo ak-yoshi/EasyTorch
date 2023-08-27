@@ -25,4 +25,4 @@ class Dataset():
     index = torch.tensor(index, dtype = int)
     data = self._transform(self._data[index]) if self._transform != None else torch.tensor(self._data[index])
     target = torch.tensor(self._target[index])
-    return { "index" : index, "data" : data, "target" : target }
+    return {"index":index, "data":data, "target":target}

@@ -11,7 +11,7 @@ def custom_collate_fn(dict)->dict:
   index = torch.stack([dict[i]["index"] for i in range(len(dict))])
   data = torch.stack([dict[i]["data"] for i in range(len(dict))])
   target = torch.stack([dict[i]["target"] for i in range(len(dict))])
-  return { "index" : index, "data" : data, "target" : target, "size" : len(dict) }
+  return {"index":index, "data":data, "target":target, "size":len(dict)}
 
 #
 # class to manage model train, evaluate and test loader
