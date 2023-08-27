@@ -6,7 +6,9 @@ class Data():
 
   # initializer
   def __init__(self)->None:
-    super().__init__()
+    self._len = 0
+    self._data = []
+    self._target = []
 
   # length getter
   def get_len(self):
